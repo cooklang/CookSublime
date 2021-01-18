@@ -1,0 +1,37 @@
+%YAML 1.2
+---
+
+name: Cook
+scope: text.cook.plain
+version: 1
+file_extensions:
+  - cook
+
+###############################################################################
+
+contexts:
+
+  main:
+    - include: step
+
+  step:
+    - meta_scope: definition.step.cook
+    - match: \{
+      scope: punctuation.definition.ingredient.begin.cook
+      push:
+        - ingredient
+    - match: \n
+      pop: true
+
+  ingredient:
+    - match: ([^:]+?):[:space:]*(.*?)\[(.+?)\]}
+      captures:
+        1: entity.name.tag.ingredient.cook
+        2: constant.numeric.ingredient.cook
+        3: string.ingredient.cook
+      pop: true
+    - match: ([^:]+?)
+      scope: entity.name.tag.unfinished.ingredient.cook
+    - match: \}
+      scope: punctuation.definition.ingredient.end.cook
+
