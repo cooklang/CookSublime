@@ -16,22 +16,36 @@ contexts:
 
   step:
     - meta_scope: definition.step.cook
-    - match: \{
-      scope: punctuation.definition.ingredient.begin.cook
+
+    - match: \@([^@]+?)(?={)
+      scope: entity.name.tag.ingredient.cook
       push:
         - ingredient
+
+    - match: \@(.+?)\b
+      scope: entity.name.tag.ingredient.cook
+      pop: true
+
+    - match: \@(.+?)
+      scope: entity.name.tag.ingredient.unfinished.cook
+      pop: true
+
+    - match: \b(\d+)\b
+      captures:
+        1: constant.numeric.quantity.ingredient.cook
+      pop: true
+
     - match: \n
       pop: true
 
   ingredient:
-    - match: ([^:]+?):[:space:]*(.*?)\[(.+?)\]}
+    - match: \{([^%]*?)}
       captures:
-        1: entity.name.tag.ingredient.cook
-        2: constant.numeric.ingredient.cook
-        3: string.ingredient.cook
+        1: constant.numeric.quantity.ingredient.cook
       pop: true
-    - match: ([^:]+?)
-      scope: entity.name.tag.unfinished.ingredient.cook
-    - match: \}
-      scope: punctuation.definition.ingredient.end.cook
 
+    - match: \{(.+?)%(.+?)}
+      captures:
+        1: constant.numeric.quantity.ingredient.cook
+        2: string.units.ingredient.cook
+      pop: true
