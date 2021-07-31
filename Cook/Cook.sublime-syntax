@@ -10,7 +10,6 @@ file_extensions:
 ###############################################################################
 
 variables:
-  # '@' followed by a pattern like \S but excluding literal '*' and '@'.
   special_symbols: '@#~'
 
 contexts:
@@ -90,17 +89,17 @@ contexts:
           pop: true
 
 
-    - match: (\w+?)(?={)
+    - match: (?<=@)(\w+?)(?={)
       scope: entity.name.tag.ingredient.one-word.cook
       push:
         - ingredient_amount
 
-    - match: ([^{{special_symbols}}]+?)(?={)
+    - match: (?<=@)([^{{special_symbols}}]+?)(?={)
       scope: entity.name.tag.ingredient.multi-word.cook
       push:
         - ingredient_amount
 
-    - match: (.+?)\b
+    - match: (?<=@)(.+?)\b
       scope: entity.name.tag.ingredient.one-word.cook
       pop: true
 
@@ -127,13 +126,13 @@ contexts:
 
         - match: $\n?
           scope: invalid.illegal.expected-end-of-amount.cook
-          pop: 2
+          pop: 3
 
   equipment:
-    - match: (\w+?)(?={)
+    - match: (?<=#)(\w+?)(?={)
       scope: entity.name.tag.equipment.one-word.cook
 
-    - match: ([^{{special_symbols}}]+?)(?={)
+    - match: (?<=#)([^{{special_symbols}}]+?)(?={)
       scope: entity.name.tag.equipment.multi-word.cook
 
     - match: \{
@@ -154,12 +153,12 @@ contexts:
       pop: true
 
   timer:
-    - match: (\w*?)(?={)
+    - match: (?<=~)(\w*?)(?={)
       scope: entity.name.tag.timer.one-word.cook
       push:
         - timer_duration
 
-    - match: ([^{{special_symbols}}]+?)(?={)
+    - match: (?<=~)([^{{special_symbols}}]+?)(?={)
       scope: entity.name.tag.timer.multi-word.cook
       push:
         - timer_duration
