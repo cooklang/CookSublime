@@ -2,50 +2,202 @@
 ---
 
 name: Cook
-scope: text.cook.plain
+scope: source.cook
 version: 1
 file_extensions:
   - cook
 
 ###############################################################################
 
+variables:
+  # '@' followed by a pattern like \S but excluding literal '*' and '@'.
+  special_symbols: '@#~'
+
 contexts:
 
+  prototype:
+    - include: comments
+
   main:
+    - include: metadata
     - include: step
 
-  step:
-    - meta_scope: definition.step.cook
 
-    - match: \@([^@]+?)(?={)
-      scope: entity.name.tag.ingredient.cook
+  metadata:
+    - match: '^>>'
+      scope: punctuation.section.mapping.begin.cook
+      push:
+        - meta_scope: metadata.cook
+        - meta_include_prototype: false
+        - match: '([^:]+?)($\n?)'
+          captures:
+            1: entity.name.tag.metadata.cook string.unquoted.plain.out.cook
+            2: invalid.illegal.expected-mapping-key.cook
+          pop: true
+        - match: '[^:]+'
+          scope: entity.name.tag.metadata.cook string.unquoted.plain.out.cook
+          push:
+            - match: $\n?
+              scope: invalid.illegal.expected-mapping-key.cook
+              pop: 2
+            - match: ':'
+              scope: punctuation.separator.mapping.key-value.cook
+              push:
+                - match: $\n?
+                  scope: invalid.illegal.expected-mapping-key.cook
+                  pop: 3
+                - match: (?=\S)
+                  set:
+                    - clear_scopes: 1
+                    - meta_include_prototype: false
+                    - meta_scope: metadata.cook
+                    - match: .+$\n?
+                      scope: value.metadata.cook string.unquoted.plain.out.cook
+                      pop: 3
+
+  step:
+
+    - match: \@
+      scope: punctuation.definition.ingredient.cook
       push:
         - ingredient
 
-    - match: \@(.+?)\b
-      scope: entity.name.tag.ingredient.cook
-      pop: true
+    - match: \#
+      scope: punctuation.definition.equipment.cook
+      push:
+        - equipment
 
-    - match: \@(.+?)
-      scope: entity.name.tag.ingredient.unfinished.cook
-      pop: true
+    - match: \~
+      scope: punctuation.definition.timer.cook
+      push:
+        - timer
 
-    - match: \b(\d+)\b
-      captures:
-        1: constant.numeric.quantity.ingredient.cook
-      pop: true
-
-    - match: \n
-      pop: true
 
   ingredient:
-    - match: \{([^%]*?)}
-      captures:
-        1: constant.numeric.quantity.ingredient.cook
+    - match: '\('
+      scope: punctuation.definition.ingredient.modifier.begin.cook
+      push:
+        - match: '[^)]+?(?=\))'
+          scope: constant.string.ingredient.modifier.cook
+        - match: '\)'
+          scope: punctuation.definition.ingredient.modifier.end.cook
+          pop: true
+        - match: '[^)]+?(?=$\n)'
+          scope: constant.string.ingredient.modifier.cook
+
+        - match: $\n?
+          scope: invalid.illegal.expected-end-of-modifier.cook
+          pop: true
+
+
+    - match: (\w+?)(?={)
+      scope: entity.name.tag.ingredient.one-word.cook
+      push:
+        - ingredient_amount
+
+    - match: ([^{{special_symbols}}]+?)(?={)
+      scope: entity.name.tag.ingredient.multi-word.cook
+      push:
+        - ingredient_amount
+
+    - match: (.+?)\b
+      scope: entity.name.tag.ingredient.one-word.cook
       pop: true
 
-    - match: \{(.+?)%(.+?)}
-      captures:
-        1: constant.numeric.quantity.ingredient.cook
-        2: string.units.ingredient.cook
+    - match: ''
       pop: true
+
+  ingredient_amount:
+    - match: \{
+      scope: punctuation.definition.ingredient.amount.begin.cook
+      push:
+
+        - match: \}
+          scope: punctuation.definition.ingredient.amount.end.cook
+          pop: 2
+
+        - match: '[^}%]+?(?=}|%)'
+          scope: constant.string.ingredient.amount.cook
+
+        - match: \%
+          scope: punctuation.definition.ingredient.amount.separator.cook
+
+        - match: '[^}%]+?(?=$\n)'
+          scope: constant.string.ingredient.amount.cook
+
+        - match: $\n?
+          scope: invalid.illegal.expected-end-of-amount.cook
+          pop: 2
+
+  equipment:
+    - match: (\w+?)(?={)
+      scope: entity.name.tag.equipment.one-word.cook
+
+    - match: ([^{{special_symbols}}]+?)(?={)
+      scope: entity.name.tag.equipment.multi-word.cook
+
+    - match: \{
+      scope: punctuation.definition.equipment.details.begin.cook
+      push:
+        - match: \}
+          scope: punctuation.definition.equipment.details.end.cook
+          pop: 2
+        - match: $\n?
+          scope: invalid.illegal.expected-end-of-details.cook
+          pop: 2
+
+    - match: (.+?)\b
+      scope: entity.name.tag.equipment.one-word.cook
+      pop: true
+
+    - match: ''
+      pop: true
+
+  timer:
+    - match: (\w*?)(?={)
+      scope: entity.name.tag.timer.one-word.cook
+      push:
+        - timer_duration
+
+    - match: ([^{{special_symbols}}]+?)(?={)
+      scope: entity.name.tag.timer.multi-word.cook
+      push:
+        - timer_duration
+
+    - match: ([^{{special_symbols}}]+?)
+      scope: invalid.illegal.expected-begining-of-duration.cook
+
+    - match: $\n?
+      pop: true
+
+  timer_duration:
+    - match: \{\s*?\}
+      scope: invalid.illegal.expected-duration.cook
+      pop: 2
+
+    - match: \{
+      scope: punctuation.definition.timer.duration.begin.cook
+      push:
+        - match: \}
+          scope: punctuation.definition.timer.duration.end.cook
+          pop: 3
+
+        - match: '[^}%]+?(?=}|%)'
+          scope: constant.string.timer.duration.cook
+
+        - match: \%
+          scope: punctuation.definition.timer.duration.separator.cook
+
+        - match: '[^}%]+?(?=$\n)'
+          scope: constant.string.timer.duration.cook
+
+        - match: $\n?
+          scope: invalid.illegal.expected-end-of-duration.cook
+          pop: 3
+
+
+  comments:
+    - match: (//).*$\n?
+      scope: comment.line.double-slash.cook
+      captures:
+        1: punctuation.definition.comment.cook

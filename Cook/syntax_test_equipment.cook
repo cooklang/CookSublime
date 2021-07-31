@@ -1,0 +1,22 @@
+// SYNTAX TEST "Packages/Cook/Cook.sublime-syntax"
+
+Place the potatoes into a #pot.
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.cook
+//                        ^ punctuation.definition.equipment.cook
+//                         ^^^ entity.name.tag.equipment.one-word.cook
+
+
+Mash the potatoes with a #potato masher{}.
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.cook
+//                       ^ punctuation.definition.equipment.cook
+//                        ^^^^^^^^^^^^^ entity.name.tag.equipment.multi-word.cook
+//                                     ^ punctuation.definition.equipment.details.begin.cook
+//                                      ^ punctuation.definition.equipment.details.end.cook
+
+
+Mash the potatoes with a #potato masher{
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.cook
+//                       ^ punctuation.definition.equipment.cook
+//                        ^^^^^^^^^^^^^ entity.name.tag.equipment.multi-word.cook
+//                                     ^ punctuation.definition.equipment.details.begin.cook
+//                                      ^ invalid.illegal.expected-end-of-details.cook
