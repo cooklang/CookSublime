@@ -7,7 +7,7 @@ A [Sublime Text](http://www.sublimetext.com/) package for the [CookLang markup l
 
 ### By Package Control
 
-1. Download & Install **`Sublime Text 3`** (https://www.sublimetext.com/3)
+1. Download & Install **`Sublime Text 4`** (https://www.sublimetext.com/4)
 1. Go to the menu **`Tools -> Install Package Control`**, then,
     wait few seconds until the installation finishes up
 1. Now,
