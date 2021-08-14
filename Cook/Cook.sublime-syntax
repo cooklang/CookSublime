@@ -2,8 +2,7 @@
 ---
 
 name: Cook
-scope: source.cook
-version: 1
+scope: text.cook
 file_extensions:
   - cook
 
