@@ -32,26 +32,29 @@ contexts:
             1: entity.name.tag.metadata.cook string.unquoted.plain.out.cook
             2: invalid.illegal.expected-mapping-key.cook
           pop: true
+
+        - match: $\n?
+          pop: true
+
         - match: '[^:]+'
           scope: entity.name.tag.metadata.cook string.unquoted.plain.out.cook
           push:
             - match: $\n?
               scope: invalid.illegal.expected-mapping-key.cook
-              pop: 2
+              pop: true
             - match: ':'
               scope: punctuation.separator.mapping.key-value.cook
               push:
                 - match: $\n?
                   scope: invalid.illegal.expected-mapping-key.cook
-                  pop: 3
+                  pop: true
                 - match: (?=\S)
                   set:
-                    - clear_scopes: 1
                     - meta_include_prototype: false
                     - meta_scope: metadata.cook
                     - match: .+$\n?
                       scope: value.metadata.cook string.unquoted.plain.out.cook
-                      pop: 3
+                      pop: true
 
   step:
 
@@ -108,11 +111,11 @@ contexts:
   ingredient_amount:
     - match: \{
       scope: punctuation.definition.ingredient.amount.begin.cook
-      push:
+      set:
 
         - match: \}
           scope: punctuation.definition.ingredient.amount.end.cook
-          pop: 2
+          pop: true
 
         - match: '[^}%]+?(?=}|%)'
           scope: constant.string.ingredient.amount.cook
@@ -125,7 +128,7 @@ contexts:
 
         - match: $\n?
           scope: invalid.illegal.expected-end-of-amount.cook
-          pop: 3
+          pop: true
 
   equipment:
     - match: (?<=#)(\w+?)(?={)
@@ -136,13 +139,13 @@ contexts:
 
     - match: \{
       scope: punctuation.definition.equipment.details.begin.cook
-      push:
+      set:
         - match: \}
           scope: punctuation.definition.equipment.details.end.cook
-          pop: 2
+          pop: true
         - match: $\n?
           scope: invalid.illegal.expected-end-of-details.cook
-          pop: 2
+          pop: true
 
     - match: (.+?)\b
       scope: entity.name.tag.equipment.one-word.cook
@@ -154,12 +157,12 @@ contexts:
   timer:
     - match: (?<=~)(\w*?)(?={)
       scope: entity.name.tag.timer.one-word.cook
-      push:
+      set:
         - timer_duration
 
     - match: (?<=~)([^{{special_symbols}}]+?)(?={)
       scope: entity.name.tag.timer.multi-word.cook
-      push:
+      set:
         - timer_duration
 
     - match: ([^{{special_symbols}}]+?)
@@ -171,14 +174,15 @@ contexts:
   timer_duration:
     - match: \{\s*?\}
       scope: invalid.illegal.expected-duration.cook
-      pop: 2
+      pop: true
 
     - match: \{
       scope: punctuation.definition.timer.duration.begin.cook
-      push:
+      set:
+
         - match: \}
           scope: punctuation.definition.timer.duration.end.cook
-          pop: 3
+          pop: true
 
         - match: '[^}%]+?(?=}|%)'
           scope: constant.string.timer.duration.cook
@@ -191,7 +195,7 @@ contexts:
 
         - match: $\n?
           scope: invalid.illegal.expected-end-of-duration.cook
-          pop: 3
+          pop: true
 
 
   comments:
