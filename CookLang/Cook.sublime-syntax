@@ -199,7 +199,14 @@ contexts:
 
 
   comments:
-    - match: (//).*$\n?
-      scope: comment.line.double-slash.cook
+    - match: (--).*$\n?
+      scope: comment.line.double-dash.cook
       captures:
         1: punctuation.definition.comment.cook
+
+    - match: '\[\-'
+      scope: punctuation.definition.comment.c
+      push:
+        - meta_scope: comment.block.c
+        - match: '\-\]'
+          pop: true
