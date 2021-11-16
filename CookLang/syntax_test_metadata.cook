@@ -1,29 +1,29 @@
-// SYNTAX TEST "Packages/Cook/Cook.sublime-syntax"
+-- SYNTAX TEST "Packages/CookLang/Cook.sublime-syntax"
 
 >> source: https://www.gimmesomeoven.com/baked-potato/
-// ^^^^^^^^^^^^^ text.cook
-// <- punctuation.section.mapping.begin.cook
-// ^^^^^^ entity.name.tag.metadata.cook
-//         ^^^^^^ value.metadata.cook
+-- ^^^^^^^^^^^^^ text.cook
+-- <- punctuation.section.mapping.begin.cook
+-- ^^^^^^ entity.name.tag.metadata.cook
+--         ^^^^^^ value.metadata.cook
 >> course: dinner
-// ^^^^^^ entity.name.tag.metadata.cook
-//         ^^^^^^ value.metadata.cook
-//       ^ punctuation.separator.mapping.key-value.cook
+-- ^^^^^^ entity.name.tag.metadata.cook
+--         ^^^^^^ value.metadata.cook
+--       ^ punctuation.separator.mapping.key-value.cook
 
 >> cooking time: 1 hour
-// ^^^^^^^^^^^^ entity.name.tag.metadata.cook
-//               ^^^^^^ value.metadata.cook
-//             ^ punctuation.separator.mapping.key-value.cook
+-- ^^^^^^^^^^^^ entity.name.tag.metadata.cook
+--               ^^^^^^ value.metadata.cook
+--             ^ punctuation.separator.mapping.key-value.cook
 
 >> course
-// ^^^^^^ entity.name.tag.metadata.cook
-//       ^ invalid.illegal.expected-mapping-key.cook
+-- ^^^^^^ entity.name.tag.metadata.cook
+--       ^ invalid.illegal.expected-mapping-key.cook
 >> course:
-// ^^^^^^ entity.name.tag.metadata.cook
-//       ^ punctuation.separator.mapping.key-value.cook
-//        ^ invalid.illegal.expected-mapping-key.cook
+-- ^^^^^^ entity.name.tag.metadata.cook
+--       ^ punctuation.separator.mapping.key-value.cook
+--        ^ invalid.illegal.expected-mapping-key.cook
 
 >> @course: @dinner
-// ^^^^^^^ entity.name.tag.metadata.cook
-//          ^^^^^^^ value.metadata.cook
-//        ^ punctuation.separator.mapping.key-value.cook
+-- ^^^^^^^ entity.name.tag.metadata.cook
+--          ^^^^^^^ value.metadata.cook
+--        ^ punctuation.separator.mapping.key-value.cook
