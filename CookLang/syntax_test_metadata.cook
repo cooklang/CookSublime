@@ -27,3 +27,15 @@
 -- ^^^^^^^ entity.name.tag.metadata.cook
 --          ^^^^^^^ value.metadata.cook
 --        ^ punctuation.separator.mapping.key-value.cook
+
+>> servings: 1
+>> produce: 350%g
+--          ^^^ meta.number.integer.decimal constant.numeric.value
+--             ^ punctuation.definition.ingredient.amount.separator
+--              ^ constant.string.ingredient.amount
+--               ^ - invalid
+>> calories: 670%kkal
+-- <- metadata punctuation.section.mapping.begin
+>> protein: 40%g
+>> total fat: 50%g
+>> total carb.: 11%g

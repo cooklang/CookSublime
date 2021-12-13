@@ -50,11 +50,17 @@ contexts:
                   pop: true
                 - match: (?=\S)
                   set:
-                    - meta_include_prototype: false
-                    - meta_scope: metadata.cook
-                    - match: .+$\n?
-                      scope: value.metadata.cook string.unquoted.plain.out.cook
+                    - metadata_value_ingredient
+                  with_prototype:
+                    - match: $\n?
                       pop: true
+
+  metadata_value_ingredient:
+    - meta_include_prototype: false
+    - meta_scope: value.metadata.cook
+    - match: $\n?
+      pop: true
+    - include: ingredient_amount_quantity
 
   step:
 
@@ -94,12 +100,12 @@ contexts:
     - match: (?<=@)(\w+?)(?={)
       scope: entity.name.tag.ingredient.one-word.cook
       push:
-        - ingredient_amount
+        - begin_ingredient_amount
 
     - match: (?<=@)([^{{special_symbols}}]+?)(?={)
       scope: entity.name.tag.ingredient.multi-word.cook
       push:
-        - ingredient_amount
+        - begin_ingredient_amount
 
     - match: (?<=@)(.+?)\b
       scope: entity.name.tag.ingredient.one-word.cook
@@ -108,27 +114,42 @@ contexts:
     - match: ''
       pop: true
 
-  ingredient_amount:
+  amount_number:
+    - match: \d+
+      scope: meta.number.integer.decimal.cook constant.numeric.value.cook
+
+  begin_ingredient_amount:
     - match: \{
       scope: punctuation.definition.ingredient.amount.begin.cook
       set:
+        - ingredient_amount_quantity
 
-        - match: \}
-          scope: punctuation.definition.ingredient.amount.end.cook
-          pop: true
+  inside_ingredient_amount:
+    - match: \}
+      scope: punctuation.definition.ingredient.amount.end.cook
+      pop: true
+    - match: $\n?
+      scope: invalid.illegal.expected-end-of-amount.cook
+      pop: true
 
-        - match: '[^}%]+?(?=}|%)'
-          scope: constant.string.ingredient.amount.cook
+  ingredient_amount_quantity:
+    - include: inside_ingredient_amount
+    - include: amount_number
+    - match: \%
+      scope: punctuation.definition.ingredient.amount.separator.cook
+      set: ingredient_amount_after_quantity
+    - match: \|
+      scope: punctuation.separator.sequence.cook
+    - match: '[/*]'
+      scope: keyword.operator.arithmetic.cook
 
-        - match: \%
-          scope: punctuation.definition.ingredient.amount.separator.cook
+  ingredient_amount_after_quantity:
+    - include: inside_ingredient_amount
+    - match: '[^}%]+?(?=}|%)'
+      scope: constant.string.ingredient.amount.cook
 
-        - match: '[^}%]+?(?=$\n)'
-          scope: constant.string.ingredient.amount.cook
-
-        - match: $\n?
-          scope: invalid.illegal.expected-end-of-amount.cook
-          pop: true
+    - match: '[^}%]+?(?=$\n)'
+      scope: constant.string.ingredient.amount.cook
 
   equipment:
     - match: (?<=#)(\w+?)(?={)
@@ -184,6 +205,7 @@ contexts:
           scope: punctuation.definition.timer.duration.end.cook
           pop: true
 
+        - include: amount_number
         - match: '[^}%]+?(?=}|%)'
           scope: constant.string.timer.duration.cook
 
@@ -199,14 +221,17 @@ contexts:
 
 
   comments:
-    - match: (--).*$\n?
-      scope: comment.line.double-dash.cook
-      captures:
-        1: punctuation.definition.comment.cook
+    - match: '--'
+      scope: punctuation.definition.comment.cook
+      push:
+        - meta_scope: comment.line.double-dash.cook
+        - match: $\n?
+          pop: true
 
     - match: '\[\-'
-      scope: punctuation.definition.comment.c
+      scope: punctuation.definition.comment.begin.cook
       push:
-        - meta_scope: comment.block.c
+        - meta_scope: comment.block.cook
         - match: '\-\]'
+          scope: punctuation.definition.comment.end.cook
           pop: true
