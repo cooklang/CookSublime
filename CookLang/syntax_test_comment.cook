@@ -1,8 +1,11 @@
--- SYNTAX TEST "Packages/CookLang/Cook.sublime-syntax"
+-- SYNTAX TEST "Cook.sublime-syntax"
 
 -- Don't burn the roux!
 -- <- comment.line.double-dash.cook
 -- ^^^^^^^^^^^^^^^^^^^^ comment.line.double-dash.cook
 
 Mash @potato{2%kg} until smooth -- alternatively, boil 'em first, then mash 'em, then stick 'em in a stew.
---                              ^^^^^^^^^^^^^^^^^^^^ comment.line.double-dash.cook
+--                              ^^ punctuation.definition.comment
+--                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ comment.line.double-dash.cook
+
+-- <- - comment

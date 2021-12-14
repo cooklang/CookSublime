@@ -1,4 +1,4 @@
--- SYNTAX TEST "Packages/CookLang/Cook.sublime-syntax"
+-- SYNTAX TEST "Cook.sublime-syntax"
 
 Then add @salt and @ground black pepper{} to taste.
 -- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ text.cook
@@ -13,16 +13,16 @@ Poke holes in @potato{2}.
 --            ^ punctuation.definition.ingredient.cook
 --             ^^^^^^ entity.name.tag.ingredient.one-word.cook
 --                   ^ punctuation.definition.ingredient.amount.begin.cook
---                    ^ constant.string.ingredient.amount.cook
+--                    ^ meta.number.integer.decimal.cook constant.numeric.value.cook
 --                     ^ punctuation.definition.ingredient.amount.end.cook
 
 Place @bacon strips{1%kg} about 70-80 g each on a #baking sheet{} and glaze with @syrup{1/2%tbsp}.
 --    ^ punctuation.definition.ingredient.cook
 --     ^^^^^^^^^^^^ entity.name.tag.ingredient.multi-word.cook
 --                 ^ punctuation.definition.ingredient.amount.begin.cook
---                  ^ constant.string.ingredient.amount.cook
+--                  ^ meta.number.integer.decimal.cook constant.numeric.value.cook
 --                   ^ punctuation.definition.ingredient.amount.separator.cook
---                    ^ constant.string.ingredient.amount.cook
+--                    ^^ constant.string.ingredient.amount.cook
 --                      ^ punctuation.definition.ingredient.amount.end.cook
 
 Mix in bacon, @shredded cheddar cheese{1/5*%cup}, and @sour cream{1/6*%cup}. Then add @salt, and @pepper to taste.
@@ -31,7 +31,7 @@ Top with @green onions{1%tbsp}(finely chopped).
 --       ^ punctuation.definition.ingredient.cook
 --        ^^^^^^^^^^^^ entity.name.tag.ingredient.multi-word.cook
 --                    ^ punctuation.definition.ingredient.amount.begin.cook
---                     ^ constant.string.ingredient.amount.cook
+--                     ^ meta.number.integer.decimal.cook constant.numeric.value.cook
 --                      ^ punctuation.definition.ingredient.amount.separator.cook
 --                       ^^^^ constant.string.ingredient.amount.cook
 --                           ^ punctuation.definition.ingredient.amount.end.cook
@@ -43,7 +43,10 @@ Add @milk{1/2*%cup} and mix until smooth.
 --  ^ punctuation.definition.ingredient.cook
 --   ^^^^ entity.name.tag.ingredient.one-word.cook
 --       ^ punctuation.definition.ingredient.amount.begin.cook
---        ^^^^ constant.string.ingredient.amount.cook
+--        ^ meta.number.integer.decimal constant.numeric.value
+--         ^ keyword.operator.arithmetic
+--          ^ meta.number.integer.decimal constant.numeric.value
+--           ^ keyword.operator.arithmetic
 --            ^ punctuation.definition.ingredient.amount.separator.cook
 --             ^^^ constant.string.ingredient.amount.cook
 --                ^ punctuation.definition.ingredient.amount.end.cook
@@ -52,7 +55,11 @@ Add @salt{1|1|1%tsp}
 --  ^ punctuation.definition.ingredient.cook
 --   ^^^^ entity.name.tag.ingredient.one-word.cook
 --       ^ punctuation.definition.ingredient.amount.begin.cook
---        ^^^^^ constant.string.ingredient.amount.cook
+--        ^ meta.number.integer.decimal constant.numeric.value
+--         ^ punctuation.separator.sequence
+--          ^ meta.number.integer.decimal constant.numeric.value
+--           ^ punctuation.separator.sequence
+--            ^ meta.number.integer.decimal constant.numeric.value
 --             ^ punctuation.definition.ingredient.amount.separator.cook
 --              ^^^ constant.string.ingredient.amount.cook
 --                 ^ punctuation.definition.ingredient.amount.end.cook
@@ -65,7 +72,7 @@ Poke holes in @potato{2%lar
 --            ^ punctuation.definition.ingredient.cook
 --             ^^^^^^ entity.name.tag.ingredient.one-word.cook
 --                   ^ punctuation.definition.ingredient.amount.begin.cook
---                    ^ constant.string.ingredient.amount.cook
+--                    ^ meta.number.integer.decimal.cook constant.numeric.value.cook
 --                     ^ punctuation.definition.ingredient.amount.separator.cook
 --                      ^^^ constant.string.ingredient.amount.cook
 --                         ^ invalid.illegal.expected-end-of-amount.cook
@@ -74,7 +81,7 @@ Top with @green onions{1%tbsp}(finely cho
 --       ^ punctuation.definition.ingredient.cook
 --        ^^^^^^^^^^^^ entity.name.tag.ingredient.multi-word.cook
 --                    ^ punctuation.definition.ingredient.amount.begin.cook
---                     ^ constant.string.ingredient.amount.cook
+--                     ^ meta.number.integer.decimal.cook constant.numeric.value.cook
 --                      ^ punctuation.definition.ingredient.amount.separator.cook
 --                       ^^^^ constant.string.ingredient.amount.cook
 --                           ^ punctuation.definition.ingredient.amount.end.cook

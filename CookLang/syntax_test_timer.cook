@@ -1,9 +1,9 @@
--- SYNTAX TEST "Packages/CookLang/Cook.sublime-syntax"
+-- SYNTAX TEST "Cook.sublime-syntax"
 
 Lay the potatoes on a #baking sheet{} and place into the #oven{}. Bake for ~{25%minutes}.
 --                                                                         ^ punctuation.definition.timer.cook
 --                                                                          ^ punctuation.definition.timer.duration.begin.cook
---                                                                           ^^ constant.string.timer.duration.cook
+--                                                                           ^^ meta.number.integer.decimal constant.numeric.value
 --                                                                             ^ punctuation.definition.timer.duration.separator.cook
 --                                                                              ^^^^^^^ constant.string.timer.duration.cook
 --                                                                                     ^ punctuation.definition.timer.duration.end.cook
@@ -18,14 +18,14 @@ Cook for ~eggs{4%min} and ~bacon strips{7%min}.
 --       ^ punctuation.definition.timer.cook
 --        ^^^^ entity.name.tag.timer.one-word.cook
 --            ^ punctuation.definition.timer.duration.begin.cook
---             ^ constant.string.timer.duration.cook
+--             ^ meta.number.integer.decimal constant.numeric.value
 --              ^ punctuation.definition.timer.duration.separator.cook
 --               ^^^ constant.string.timer.duration.cook
 --                  ^ punctuation.definition.timer.duration.end.cook
 --                        ^ punctuation.definition.timer.cook
 --                         ^^^^ entity.name.tag.timer.multi-word.cook
 --                                     ^ punctuation.definition.timer.duration.begin.cook
---                                      ^ constant.string.timer.duration.cook
+--                                      ^ meta.number.integer.decimal constant.numeric.value
 --                                       ^ punctuation.definition.timer.duration.separator.cook
 --                                        ^^^ constant.string.timer.duration.cook
 --                                           ^ punctuation.definition.timer.duration.end.cook
