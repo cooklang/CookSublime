@@ -1,0 +1,37 @@
+-- SYNTAX TEST "Cook.sublime-syntax"
+
+= Preparation Section =
+-- <- punctuation.definition.heading.begin.cook
+--^^^^^^^^^^^^^^^^^^^^ entity.name.section.cook markup.heading.cook
+--                    ^ punctuation.definition.heading.end.cook
+
+== Main Section
+-- <- punctuation.definition.heading.begin.cook
+-- ^^^^^^^^^^^^ entity.name.section.cook markup.heading.cook
+
+> This is a recipe note
+-- <- punctuation.definition.note.cook
+--^^^^^^^^^^^^^^^^^^^^^ comment.block.documentation.cook
+
+Prepare @potatoes{2%kg}(peeled and diced) in pot.
+--      ^ punctuation.definition.ingredient.cook
+--       ^^^^^^^^ entity.name.tag.ingredient
+--               ^ punctuation.definition.ingredient.amount.begin.cook
+--                ^ meta.number.integer.decimal.cook constant.numeric.value.cook
+--                 ^ punctuation.definition.ingredient.amount.separator.cook
+--                  ^^ constant.string.ingredient.amount.cook
+--                    ^ punctuation.definition.ingredient.amount.end.cook
+--                     ^ punctuation.definition.ingredient.modifier.begin.cook
+--                      ^^^^^^^^^^^^^^^^ entity.name.type.ingredient.modifier.cook
+--                                      ^ punctuation.definition.ingredient.modifier.end.cook
+
+
+Cook for ~preparation{20%minutes}.
+--       ^ punctuation.definition.timer.cook
+--        ^^^^^^^^^^^ entity.name.tag.timer
+--                   ^ punctuation.definition.timer.duration.begin.cook
+--                    ^^ meta.number.integer.decimal.cook constant.numeric.value.cook
+--                      ^ punctuation.definition.timer.duration.separator.cook
+--                       ^^^^^^^ constant.string.timer.duration.cook
+--                              ^ punctuation.definition.timer.duration.end.cook
+

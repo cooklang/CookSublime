@@ -17,7 +17,10 @@ contexts:
     - include: comments
 
   main:
+    - include: frontmatter
     - include: metadata
+    - include: section
+    - include: recipe_note
     - include: step
 
 
@@ -85,17 +88,16 @@ contexts:
       scope: punctuation.definition.ingredient.modifier.begin.cook
       push:
         - match: '[^)]+?(?=\))'
-          scope: constant.string.ingredient.modifier.cook
+          scope: entity.name.type.ingredient.modifier.cook
         - match: '\)'
           scope: punctuation.definition.ingredient.modifier.end.cook
           pop: true
         - match: '[^)]+?(?=$\n)'
-          scope: constant.string.ingredient.modifier.cook
+          scope: entity.name.type.ingredient.modifier.cook
 
         - match: $\n?
           scope: invalid.illegal.expected-end-of-modifier.cook
           pop: true
-
 
     - match: (?<=@)(\w+?)(?={)
       scope: entity.name.tag.ingredient.one-word.cook
@@ -219,9 +221,38 @@ contexts:
           scope: invalid.illegal.expected-end-of-duration.cook
           pop: true
 
+  frontmatter:
+    - match: '\A(---)$'
+      captures:
+        1: punctuation.definition.frontmatter.begin.cook
+      push:
+        - meta_scope: markup.raw.yaml.frontmatter.cook
+        - meta_include_prototype: false
+        - match: '^(---)$'
+          captures:
+            1: punctuation.definition.frontmatter.end.cook
+          pop: true
+        - include: scope:source.yaml
+
+  section:
+    - match: '^(={1,})([^=]+)(={1,})?$'
+      captures:
+        1: punctuation.definition.heading.begin.cook
+        2: entity.name.section.cook markup.heading.cook
+        3: punctuation.definition.heading.end.cook
+
+  recipe_note:
+    - match: '^>'
+      scope: punctuation.definition.note.cook
+      push:
+        - meta_scope: comment.block.documentation.cook
+        - match: $\n?
+          pop: true
+        - match: '.+'
+          scope: string.quoted.other.cook
 
   comments:
-    - match: '--'
+    - match: '(?<!-)--(?!-)'
       scope: punctuation.definition.comment.cook
       push:
         - meta_scope: comment.line.double-dash.cook
@@ -232,6 +263,7 @@ contexts:
       scope: punctuation.definition.comment.begin.cook
       push:
         - meta_scope: comment.block.cook
+        - meta_include_prototype: false
         - match: '\-\]'
           scope: punctuation.definition.comment.end.cook
           pop: true
