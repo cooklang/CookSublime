@@ -1,7 +1,7 @@
 %YAML 1.2
 ---
 
-name: Cook
+name: Cooklang
 scope: text.cook
 file_extensions:
   - cook
