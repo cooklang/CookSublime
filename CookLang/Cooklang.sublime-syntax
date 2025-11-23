@@ -5,6 +5,7 @@ name: Cooklang
 scope: text.cook
 file_extensions:
   - cook
+  - menu
 
 ###############################################################################
 
